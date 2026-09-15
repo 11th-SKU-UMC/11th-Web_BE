@@ -28,13 +28,25 @@
         <a href="https://github.com/kxxnayun">🔗 깃허브 방문하기</a>
         <br />
         <button
-          class="cursor-pointer inline-flex items-center gap-1 rounded-lg border border-gray-200 px-4 py-2 mt-2"
+          class="cursor-pointer inline-flex items-center gap-1 rounded-lg border border-gray-200 px-4 py-2 mt-4"
           type="button"
+          id="clapButton"
         >
           <span>👏</span>
           <span>박수</span>
         </button>
+        <div id="clapArea"></div>
       </section>
     </main>
+
+    <script>
+      const button = document.querySelector("#clapButton");
+      const clapArea = document.querySelector("#clapArea");
+      button.addEventListener("click", () => {
+        const clap = document.createElement("span");
+        clap.textContent = "👏";
+        clapArea.appendChild(clap);
+      });
+    </script>
   </body>
 </html>
