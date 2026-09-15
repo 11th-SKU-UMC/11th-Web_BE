@@ -4,15 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>김나윤</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
-  <body>
-    <header>
-      <h1>어제보다 더 나은 내일을 만들고 싶은 개발자 김나윤입니다! ✨</h1>
-    </header>
+  <body class="bg-gray-100">
+    <main
+      class="bg-white mx-auto mt-20 max-w-xl rounded-xl p-8 shadow-xl text-center space-y-6"
+    >
+      <header class="text-xl font-bold p-4">
+        <h1>어제보다 더 나은 내일을 만들고 싶은 개발자 김나윤입니다! ✨</h1>
+      </header>
 
-    <main>
       <section>
-        <h3>배우고 싶은 기술 세 가지</h3>
+        <h3 class="text-lg font-bold">배우고 싶은 기술 세 가지</h3>
         <ul>
           <li>FrontEnd</li>
           <li>BackEnd</li>
@@ -20,12 +23,17 @@
         </ul>
       </section>
 
-      <section>
-        <h3>깃허브</h3>
-        <a href="https://github.com/kxxnayun">깃허브 방문하기</a>
+      <section class="p-4">
+        <h3 class="text-lg font-bold">깃허브</h3>
+        <a href="https://github.com/kxxnayun">🔗 깃허브 방문하기</a>
         <br />
-        <br />
-        <button type="button">👏</button>
+        <button
+          class="cursor-pointer inline-flex items-center gap-1 rounded-lg border border-gray-200 px-4 py-2"
+          type="button"
+        >
+          <span>👏</span>
+          <span>박수</span>
+        </button>
       </section>
     </main>
   </body>
