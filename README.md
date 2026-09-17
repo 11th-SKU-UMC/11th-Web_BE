@@ -1,5 +1,5 @@
-# 🌐 11th-Web  
-> 11th 서경대 **UMC PE-Web 파트 Repository** 입니다.  
+# 🌐 11th-Web_BE
+> 11th 서경대 **UMC PE-Web 파트 백엔드 Repository** 입니다.  
 
 <p>
   <img src="https://img.shields.io/badge/UMC-11th-6A5ACD?style=for-the-badge&logo=github&logoColor=white" />
