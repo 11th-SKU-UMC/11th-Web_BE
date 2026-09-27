@@ -1,0 +1,5 @@
+rootProject.name = 'UMC_11th_BE'
+
+include 'week01'
+include 'week02'
+include 'week03'
