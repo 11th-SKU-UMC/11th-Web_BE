@@ -1,4 +1,4 @@
-package com.example.library.book;
+package com.example.library.domain.book.repository;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

@@ -1,5 +1,6 @@
-package com.example.library.book;
+package com.example.library.domain.book.service;
 
+import com.example.library.domain.book.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

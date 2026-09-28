@@ -1,4 +1,4 @@
-package com.example.library.common;
+package com.example.library.global.handler;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
