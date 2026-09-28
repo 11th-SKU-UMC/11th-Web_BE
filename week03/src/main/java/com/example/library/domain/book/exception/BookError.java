@@ -30,5 +30,5 @@ public enum BookError implements ErrorCode {
     @Override
     public String getCode() {
         return code;
-    }
+     }
 }
