@@ -1,32 +1,15 @@
 package com.umc.domain.book.repository;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import com.umc.domain.book.entity.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Map;
 
-@Repository
-@RequiredArgsConstructor
-public class BookRepository {
+public interface BookRepository extends JpaRepository<Book, Long> {
 
-    private final JdbcTemplate jdbcTemplate;
+    // 1. 카테고리 ID로 도서 목록 조회 (기존 findByCategoryId 대체)
+    List<Book> findByCategory_Id(Long categoryId);
 
-    public List<Map<String, Object>> findByCategoryId(Long categoryId) {
-        String sql = "SELECT book_id, category_id, title, description, is_available FROM book WHERE category_id = ?";
-        return jdbcTemplate.queryForList(sql, categoryId);
-    }
-
-    // 책의 대여 가능 여부 조회
-    public boolean isBookAvailable(Long bookId) {
-        String sql = "SELECT is_available FROM book WHERE book_id = ?";
-        return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, bookId));
-    }
-
-    // 책 대여 상태 변경 (is_available -> false)
-    public void updateBookAvailability(Long bookId, boolean isAvailable) {
-        String sql = "UPDATE book SET is_available = ? WHERE book_id = ?";
-        jdbcTemplate.update(sql, isAvailable, bookId);
-    }
+    // 2. 전체 목록 최신순 조회 (4주차 필수 미션 요구사항)
+    List<Book> findAllByOrderByBookIdDesc();
 }
