@@ -41,3 +41,7 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+dependencies {
+    implementation 'org.springframework.boot:starter-data-jpa'
+}
