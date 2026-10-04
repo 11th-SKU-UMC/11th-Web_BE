@@ -1,0 +1,103 @@
+{
+  "info": {
+    "name": "UMC ORM Book API",
+    "description": "GET/POST books and validation/error cases. Set categoryId to an existing category in the target database before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "categoryId", "value": "1" },
+    { "key": "missingCategoryId", "value": "999999" }
+  ],
+  "item": [
+    {
+      "name": "GET /books - all books newest first",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns 200 and a list', () => { pm.response.to.have.status(200); pm.expect(pm.response.json()).to.be.an('array'); });",
+              "pm.test('returns required response fields in descending bookId order', () => { const books = pm.response.json(); books.forEach(book => ['bookId', 'title', 'description', 'categoryName', 'isAvailable'].forEach(key => pm.expect(book).to.have.property(key))); for (let i = 1; i < books.length; i++) pm.expect(books[i - 1].bookId).to.be.at.least(books[i].bookId); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /books - create book (201)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"categoryId\": {{categoryId}},\n  \"title\": \"Postman ORM 도서\",\n  \"description\": \"Postman으로 등록한 도서\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('returns 201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('returns the created book response', () => { const book = pm.response.json(); pm.expect(book.bookId).to.be.a('number'); pm.expect(book.title).to.eql('Postman ORM 도서'); pm.expect(book).to.have.property('categoryName'); pm.expect(book).to.have.property('isAvailable'); pm.environment.set('createdBookId', book.bookId); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /books - blank title (400)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"categoryId\": {{categoryId}},\n  \"title\": \"   \",\n  \"description\": \"제목 검증 오류\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('returns 400 Bad Request', () => pm.response.to.have.status(400));"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /books - missing category (404)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"categoryId\": {{missingCategoryId}},\n  \"title\": \"없는 카테고리 도서\",\n  \"description\": \"카테고리 조회 오류\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": "{{baseUrl}}/books"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": ["pm.test('returns 404 Not Found', () => pm.response.to.have.status(404));"]
+          }
+        }
+      ]
+    }
+  ]
+}
