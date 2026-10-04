@@ -12,3 +12,11 @@ out/
 .gradle/
 build/
 bin/
+
+# QueryDSL / Generated Code (JPA 활용 시 생성 파일 방지)
+/src/main/generated/
+
+# Key & Certificate Files (보안 키 및 인증서 방지)
+*.pem
+*.key
+*.p12
