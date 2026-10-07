@@ -1,0 +1,12 @@
+### 카테고리별 도서 조회
+GET http://localhost:8080/books/category/1
+Accept: application/json
+
+### 신규 도서 대여
+POST http://localhost:8080/rentals
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "bookId": 1
+}
