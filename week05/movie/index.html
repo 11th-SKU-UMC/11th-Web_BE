@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<title>API 확인</title>
+<h1>API 확인</h1>
+<button onclick="callAll()">모든 API 호출</button>
+<pre id="result">버튼을 눌러 현재 구현된 API 3개를 확인하세요.</pre>
+<script>
+async function callAll() {
+  const result = document.querySelector('#result');
+  result.textContent = '요청 중...';
+  try {
+    const requests = [
+      ['닉네임 확인', '/members/nickname/수현'],
+      ['이메일 확인', '/members/email/noco@umc.com'],
+      ['1번 회원 평점', '/members/1/ratings'],
+    ];
+    const responses = await Promise.all(requests.map(async ([label, path]) => {
+      const response = await fetch(`http://localhost:8080${path}`);
+      return `${label} · HTTP ${response.status}\n${JSON.stringify(await response.json())}`;
+    }));
+    result.textContent = responses.join('\n\n');
+  } catch (error) {
+    result.textContent = `요청 실패: ${error}`;
+  }
+}
+</script>
+</html>
