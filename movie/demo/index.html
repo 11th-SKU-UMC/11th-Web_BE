@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Movie API 확인 화면</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div class="eyebrow">UMC · MOVIE API</div>
+        <h1>회원 정보와 평점 조회</h1>
+        <p>화면에서 세 API를 직접 호출하고 결과를 확인합니다.</p>
+        <div class="connection">웹 화면 <strong id="origin-label">localhost:5173</strong><span>→</span> API <strong>localhost:8080</strong></div>
+      </header>
+
+      <section class="checks" aria-label="중복 확인">
+        <article class="card">
+          <div class="card-heading"><span class="number">01</span><h2>닉네임 중복 확인</h2></div>
+          <p class="description">2~12자의 닉네임을 입력하세요.</p>
+          <form id="nickname-form" novalidate>
+            <label for="nickname">닉네임</label>
+            <div class="input-row"><input id="nickname" name="nickname" value="수현" autocomplete="off" /><button type="submit">확인</button></div>
+          </form>
+          <div class="result" id="nickname-result" role="status" aria-live="polite">조회 전</div>
+          <code id="nickname-json">응답을 기다리는 중</code>
+        </article>
+
+        <article class="card">
+          <div class="card-heading"><span class="number">02</span><h2>이메일 중복 확인</h2></div>
+          <p class="description">이메일 형식을 확인한 뒤 중복 여부를 조회합니다.</p>
+          <form id="email-form" novalidate>
+            <label for="email">이메일</label>
+            <div class="input-row"><input id="email" name="email" value="suhyun@example.com" autocomplete="off" /><button type="submit">확인</button></div>
+          </form>
+          <div class="result" id="email-result" role="status" aria-live="polite">조회 전</div>
+          <code id="email-json">응답을 기다리는 중</code>
+        </article>
+      </section>
+
+      <section class="card ratings" aria-labelledby="ratings-title">
+        <div class="card-heading"><span class="number">03</span><h2 id="ratings-title">회원별 평점 목록</h2></div>
+        <p class="description">페이지 번호는 0부터 시작합니다. 최신 평점부터 표시합니다.</p>
+        <form id="ratings-form" novalidate>
+          <div class="field"><label for="member-id">회원 ID</label><input id="member-id" name="memberId" type="number" min="1" value="1" /></div>
+          <div class="field"><label for="page">페이지</label><input id="page" name="page" type="number" min="0" value="0" /></div>
+          <div class="field"><label for="size">페이지 크기</label><input id="size" name="size" type="number" min="1" max="100" value="10" /></div>
+          <button type="submit">평점 조회</button>
+        </form>
+        <div class="ratings-toolbar">
+          <div class="result" id="ratings-result" role="status" aria-live="polite">조회 전</div>
+          <div class="pager"><button id="previous-page" type="button" disabled>이전</button><span id="page-indicator">0 페이지</span><button id="next-page" type="button" disabled>다음</button></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>평점 ID</th><th>영화 ID</th><th>점수</th><th>한줄평</th><th>작성일</th></tr></thead>
+            <tbody id="ratings-body"><tr><td colspan="5" class="empty">응답을 기다리는 중</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
