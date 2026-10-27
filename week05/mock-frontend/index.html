@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UMC Movie API 테스트</title>
+    <style>
+      body { font-family: sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+      section { margin-bottom: 32px; }
+      form { display: flex; gap: 8px; }
+      input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 6px; }
+      button { padding: 8px 16px; border: none; border-radius: 6px; background: #111; color: #fff; cursor: pointer; }
+      .ok { color: #3461ff; }
+      .error { color: #ef4444; }
+      .rating { border: 1px solid #ddd; border-radius: 6px; padding: 10px; margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <h1>UMC Movie API 테스트</h1>
+
+    <section>
+      <h2>닉네임 중복 체크</h2>
+      <form id="nickname-form">
+        <input id="nickname-input" placeholder="예: 수현" />
+        <button type="submit">중복 확인</button>
+      </form>
+      <p id="nickname-result"></p>
+    </section>
+
+    <section>
+      <h2>이메일 중복 체크</h2>
+      <form id="email-form">
+        <input id="email-input" placeholder="예: noco@umc.com" />
+        <button type="submit">중복 확인</button>
+      </form>
+      <p id="email-result"></p>
+    </section>
+
+    <section>
+      <h2>유저별 평점 조회</h2>
+      <form id="ratings-form">
+        <input id="member-id-input" placeholder="회원 번호" value="1" />
+        <button type="submit">조회</button>
+      </form>
+      <div id="ratings-result"></div>
+    </section>
+
+    <script>
+      const API_BASE_URL = "http://localhost:8080";
+
+      function showText(element, text, className) {
+        element.textContent = text;
+        element.className = className;
+      }
+
+      async function checkAvailability(path, value, resultElement) {
+        if (!value) {
+          showText(resultElement, "값을 입력해 주세요.", "error");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/members/${path}/${encodeURIComponent(value)}`);
+
+          if (!response.ok) {
+            showText(resultElement, `요청 실패: ${response.status}`, "error");
+            return;
+          }
+
+          const data = await response.json();
+          showText(
+            resultElement,
+            data.available ? "사용할 수 있어요." : "이미 사용 중이에요.",
+            data.available ? "ok" : "error",
+          );
+        } catch {
+          showText(resultElement, "서버에 연결하지 못했어요.", "error");
+        }
+      }
+
+      document.getElementById("nickname-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const value = document.getElementById("nickname-input").value.trim();
+        checkAvailability("nickname", value, document.getElementById("nickname-result"));
+      });
+
+      document.getElementById("email-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const value = document.getElementById("email-input").value.trim();
+        checkAvailability("email", value, document.getElementById("email-result"));
+      });
+
+      document.getElementById("ratings-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const resultElement = document.getElementById("ratings-result");
+        const memberId = document.getElementById("member-id-input").value.trim();
+        resultElement.innerHTML = "불러오는 중이에요.";
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/members/${memberId}/ratings`);
+
+          if (response.status === 404) {
+            resultElement.innerHTML = '<p class="error">존재하지 않는 회원이에요.</p>';
+            return;
+          }
+
+          if (!response.ok) {
+            resultElement.innerHTML = `<p class="error">요청 실패: ${response.status}</p>`;
+            return;
+          }
+
+          const data = await response.json();
+          const ratings = data.content;
+
+          if (ratings.length === 0) {
+            resultElement.innerHTML = "<p>남긴 평점이 없어요.</p>";
+            return;
+          }
+
+          resultElement.innerHTML = ratings
+            .map(
+              (rating) => `
+                <div class="rating">
+                  <strong>영화 #${rating.movieId} · ${"★".repeat(rating.score)}</strong>
+                  <p>${rating.comment ?? "코멘트 없음"}</p>
+                  <small>${rating.createdAt}</small>
+                </div>
+              `,
+            )
+            .join("");
+        } catch {
+          resultElement.innerHTML = '<p class="error">서버에 연결하지 못했어요.</p>';
+        }
+      });
+    </script>
+  </body>
+</html>
