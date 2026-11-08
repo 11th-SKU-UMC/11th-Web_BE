@@ -1,0 +1,11 @@
+package com.umc.movie.controller;
+import com.umc.movie.dto.CheckResponse;
+import com.umc.movie.service.MemberService;
+import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/members")
+public class MemberController {
+ private final MemberService service;
+ public MemberController(MemberService service){this.service=service;}
+ @GetMapping("/nickname/{nickname}") public CheckResponse nickname(@PathVariable String nickname){return service.nickname(nickname);}
+ @GetMapping("/email/{email}") public CheckResponse email(@PathVariable String email){return service.email(email);}
+}
