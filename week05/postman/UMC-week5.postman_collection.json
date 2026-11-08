@@ -1,0 +1,133 @@
+{
+  "info": {
+    "name": "UMC 5주차 Spring Boot API 검증",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "필수 API 3개 + 선택 미션 테스트"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 닉네임 중복 체크",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/nickname/%EC%88%98%ED%98%84",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "nickname",
+            "%EC%88%98%ED%98%84"
+          ]
+        }
+      }
+    },
+    {
+      "name": "02 이메일 중복 체크",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/email/noco@umc.com",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "email",
+            "noco@umc.com"
+          ]
+        }
+      }
+    },
+    {
+      "name": "03 유저별 평점 조회",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/1/ratings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "1",
+            "ratings"
+          ]
+        }
+      }
+    },
+    {
+      "name": "04 유효성 검증 400",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/nickname/a",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "nickname",
+            "a"
+          ]
+        }
+      }
+    },
+    {
+      "name": "05 존재하지 않는 유저 404",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/999/ratings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "999",
+            "ratings"
+          ]
+        }
+      }
+    },
+    {
+      "name": "06 페이지네이션",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/members/1/ratings?page=0&size=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "members",
+            "1",
+            "ratings"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
