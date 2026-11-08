@@ -4,8 +4,7 @@ import com.umc.movie.dto.CreateRatingRequest;
 import com.umc.movie.dto.UpdateRatingRequest;
 import com.umc.movie.entity.Member;
 import com.umc.movie.entity.Rating;
-import com.umc.movie.exception.DuplicateError;
-import com.umc.movie.exception.DuplicateResourceException;
+import com.umc.movie.exception.ApiException;
 import com.umc.movie.repository.MemberRepository;
 import com.umc.movie.repository.RatingRepository;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -37,9 +35,9 @@ class RatingServiceWriteTest {
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
         when(ratingRepository.existsByMember_MemberIdAndMovieId(1L, 10L)).thenReturn(true);
 
-        assertEquals(DuplicateError.RATING,
-                assertThrows(DuplicateResourceException.class,
-                        () -> ratingService.create(1L, new CreateRatingRequest(10L, 5, "good"))).error());
+        assertEquals("RATING409_1",
+                assertThrows(ApiException.class,
+                        () -> ratingService.create(1L, new CreateRatingRequest(10L, 5, "good"))).getCode());
         verify(ratingRepository, never()).save(any());
     }
 
@@ -50,11 +48,11 @@ class RatingServiceWriteTest {
         Rating rating = Rating.builder().member(owner).movieId(10L).score(4).build();
         when(ratingRepository.findById(7L)).thenReturn(Optional.of(rating));
 
-        assertEquals(403, assertThrows(ResponseStatusException.class,
+        assertEquals(403, assertThrows(ApiException.class,
                 () -> ratingService.update(7L, 2L, new UpdateRatingRequest(5, "changed")))
-                .getStatusCode().value());
-        assertEquals(403, assertThrows(ResponseStatusException.class,
-                () -> ratingService.delete(7L, 2L)).getStatusCode().value());
+                .getStatus().value());
+        assertEquals(403, assertThrows(ApiException.class,
+                () -> ratingService.delete(7L, 2L)).getStatus().value());
         verify(ratingRepository, never()).save(any());
         verify(ratingRepository, never()).delete(any());
     }
@@ -63,10 +61,10 @@ class RatingServiceWriteTest {
     void missingRatingReturns404() {
         when(ratingRepository.findById(999L)).thenReturn(Optional.empty());
 
-        assertEquals(404, assertThrows(ResponseStatusException.class,
+        assertEquals(404, assertThrows(ApiException.class,
                 () -> ratingService.update(999L, 1L, new UpdateRatingRequest(5, "changed")))
-                .getStatusCode().value());
-        assertEquals(404, assertThrows(ResponseStatusException.class,
-                () -> ratingService.delete(999L, 1L)).getStatusCode().value());
+                .getStatus().value());
+        assertEquals(404, assertThrows(ApiException.class,
+                () -> ratingService.delete(999L, 1L)).getStatus().value());
     }
 }
