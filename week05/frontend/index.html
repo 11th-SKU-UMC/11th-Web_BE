@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UMC 5주차 | 영화 평점 API 연동</title>
+<style>
+body{font-family:system-ui,-apple-system,sans-serif;max-width:940px;margin:40px auto;padding:20px;background:#f4f6fa;color:#15213a}
+header{margin-bottom:24px}header p{color:#596579}section{padding:22px;background:white;border-radius:14px;margin-bottom:16px;box-shadow:0 1px 4px #15213a10}
+h2{font-size:18px;margin:0 0 13px}input{padding:11px;margin:6px 8px 6px 0;border:1px solid #b8c3d2;border-radius:8px;max-width:260px}button{padding:11px 15px;margin:4px;border:0;border-radius:8px;background:#285bd4;color:white;cursor:pointer}button:hover{background:#1e43a1}button:focus-visible{outline:3px solid #90baff}pre{white-space:pre-wrap;word-break:break-word;background:#101827;color:#dbeafe;padding:16px;border-radius:10px;min-height:70px}.meta{font-size:13px;color:#66748a}.status{font-weight:700}.ok{color:#147d55}.fail{color:#bf3d3d}
+</style>
+</head>
+<body>
+<header><h1>🎬 영화 평점 서비스 — API 연동 인증</h1><p>프론트엔드 (localhost:5173) → Spring Boot (localhost:8080) / 현재 구현한 API 3개 모두 연동</p></header>
+<section><h2>1. 닉네임 중복 확인</h2><label for="nickname">닉네임</label><input id="nickname" value="수현"><button data-kind="nickname">중복 체크</button></section>
+<section><h2>2. 이메일 중복 확인</h2><label for="email">이메일</label><input id="email" value="noco@umc.com"><button data-kind="email">중복 체크</button></section>
+<section><h2>3. 유저별 평점 조회</h2><label for="memberId">회원 ID</label><input id="memberId" type="number" min="1" value="1"><button data-kind="ratings">전체 조회</button><button data-kind="paged">페이지 조회 (선택)</button></section>
+<section><h2>API 응답 결과</h2><div id="request" class="meta">요청 URL이 여기에 표시됩니다.</div><p id="status" aria-live="polite"></p><pre id="result" aria-live="polite">버튼을 눌러주세요.</pre></section>
+<script>
+const BASE = 'http://localhost:8080';
+const $ = id => document.getElementById(id);
+async function callApi(kind) {
+  let path;
+  if (kind === 'nickname') path = '/members/nickname/' + encodeURIComponent($('nickname').value);
+  else if (kind === 'email') path = '/members/email/' + encodeURIComponent($('email').value);
+  else path = '/members/' + encodeURIComponent($('memberId').value) + '/ratings' + (kind === 'paged' ? '?page=0&size=10' : '');
+  const url = BASE + path;
+  $('request').textContent = 'GET ' + url;
+  $('status').className = '';
+  $('status').textContent = '요청 중...';
+  try {
+    const response = await fetch(url);
+    const raw = await response.text();
+    let data;
+    try { data = JSON.parse(raw); } catch { data = raw; }
+    $('status').textContent = 'HTTP ' + response.status + (response.ok ? ' — 정상 응답' : ' — 오류 응답');
+    $('status').className = 'status ' + (response.ok ? 'ok' : 'fail');
+    $('result').textContent = JSON.stringify(data, null, 2);
+  } catch (error) {
+    $('status').textContent = '네트워크 / CORS 오류';
+    $('status').className = 'status fail';
+    $('result').textContent = error.message + '\nSpring Boot 8080 실행 여부와 CORS 설정을 확인하세요.';
+  }
+}
+document.querySelectorAll('button[data-kind]').forEach(button => button.addEventListener('click', () => callApi(button.dataset.kind)));
+</script>
+</body>
+</html>
