@@ -15,3 +15,9 @@ spring:
 jwt:
   secret: ${JWT_SECRET}
   access-expiration: ${JWT_ACCESS_EXPIRATION}
+
+springdoc:
+  override-with-generic-response: false
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
