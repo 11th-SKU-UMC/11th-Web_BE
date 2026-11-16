@@ -1,0 +1,31 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>UMC 7주차 API 실습</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6fb;color:#18223b;font-family:Arial,'Malgun Gothic',sans-serif}main{max-width:1040px;margin:40px auto;padding:0 22px}header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}small{color:#6758db;letter-spacing:2px}h1{font-size:30px}p{font-size:14px;line-height:1.8;color:#727d94}button{border:0;background:#5b4fe1;color:white;padding:14px 22px;border-radius:9px;font-weight:bold;cursor:pointer}button:disabled{opacity:.5;cursor:wait}.card{background:white;border:1px solid #e0e5ef;border-radius:12px;padding:24px;margin:16px 0}.top{display:flex;justify-content:space-between;align-items:center;gap:16px}h2{font-size:18px;margin:0}.badge{background:#e7f8ef;color:#128150;padding:7px 12px;border-radius:30px;font-size:12px;font-weight:bold}.badge.error{background:#fff0e9;color:#b24421}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 Consolas,monospace;padding:16px;border-radius:9px;background:#f5f7fb;margin-bottom:0}.label{font-size:11px;letter-spacing:1px;font-weight:bold;color:#8a94a6;margin:20px 0 8px}#status{font-weight:bold;color:#5648cf}.notice{background:#eeecff;padding:14px 18px;border-radius:9px;font-size:13px;color:#61558f}
+</style></head><body><main><header><div><small>UMC BACKEND / WEEK 07</small><h1>인증과 인가, 직접 확인하기</h1></div><button id="run">9단계 실행</button></header><p>실행 중인 Spring Boot 서버에 실제 HTTP 요청을 전송합니다. 회원 A·B 가입 → 로그인 → 등록·중복·수정·인가·삭제를 확인합니다.</p><div class="notice">이 화면은 실습용 브라우저 화면이며 Postman 화면이 아닙니다. 로그인 토큰이 표시되므로 로컬 학습용으로만 사용하세요.</div><p id="status" role="status">버튼을 눌러 시작하세요.</p><div id="results"></div></main><script>
+const out=document.querySelector('#results'),button=document.querySelector('#run');
+window.evidence=[];
+async function request(id,title,method,path,body,token,expected,code) {
+ const headers={}; if(body)headers['Content-Type']='application/json'; if(token)headers.Authorization='Bearer '+token;
+ const response=await fetch(path,{method,headers,body:body?JSON.stringify(body):undefined}); const data=await response.json();
+ const pass=response.status===expected && data.code===code;
+ const evidence={id,title,method,path,request:body||null,authorization:token?'Bearer (로그인 토큰)':'없음',status:response.status,response:data,pass}; window.evidence.push(evidence);
+ const card=document.createElement('article');card.className='card';card.id=id;
+ const top=document.createElement('div');top.className='top';const h=document.createElement('h2');h.textContent=title;const badge=document.createElement('span');badge.className='badge'+(response.status>=400?' error':'');badge.textContent='HTTP '+response.status+' · '+(pass?'PASS':'FAIL');top.append(h,badge);card.append(top);
+ for(const [label,text] of [['REQUEST',method+' '+path+'\nAuthorization: '+evidence.authorization+(body?'\n\n'+JSON.stringify(body,null,2):'')],['RESPONSE',JSON.stringify(data,null,2)]]) {const l=document.createElement('div');l.className='label';l.textContent=label;const pre=document.createElement('pre');pre.textContent=text;card.append(l,pre);}out.append(card);
+ if(!pass)throw new Error(title+' 예상과 다른 응답');return data.result;
+}
+button.onclick=async()=>{button.disabled=true;out.replaceChildren();window.evidence=[];const status=document.querySelector('#status');status.textContent='실제 API 요청 중…';
+ try {const suffix=Date.now().toString().slice(-7);const password='Password1!';
+ await request('signup-a','1a · A 회원가입','POST','/members',{email:'a'+suffix+'@umc.com',nickname:'에이'+suffix,password},null,201,'COMMON201');
+ await request('signup-b','1b · B 회원가입','POST','/members',{email:'b'+suffix+'@umc.com',nickname:'비비'+suffix,password},null,201,'COMMON201');
+ const a=await request('login-a','2a · 로그인 성공','POST','/auth/login',{email:'a'+suffix+'@umc.com',password},null,200,'COMMON200');
+ const b=await request('login-b','2b · B 로그인','POST','/auth/login',{email:'b'+suffix+'@umc.com',password},null,200,'COMMON200');
+ const rating=await request('rating-created','3 · 본인 평점 등록','POST','/ratings',{movieId:100,score:4.5,comment:'재미있어요'},a.accessToken,201,'COMMON201');
+ await request('duplicate','4 · 같은 영화 중복 등록','POST','/ratings',{movieId:100,score:4.5},a.accessToken,409,'RATING409_1');
+ await request('own-update','5 · 본인 평점 수정','PATCH','/ratings/'+rating.ratingId,{score:5,comment:'수정 완료'},a.accessToken,200,'COMMON200');
+ await request('forbidden','6 · B로 A 평점 수정 시도','PATCH','/ratings/'+rating.ratingId,{score:1},b.accessToken,403,'RATING403_1');
+ await request('unauthorized','7 · 토큰 없이 내 정보 조회','GET','/members/me',null,null,401,'AUTH401_2');
+ await request('not-found','8 · 없는 평점 삭제','DELETE','/ratings/99999',null,a.accessToken,404,'RATING404_1');
+ await request('deleted','9 · 본인 평점 삭제','DELETE','/ratings/'+rating.ratingId,null,a.accessToken,200,'COMMON200');
+ status.textContent='9단계 완료 · '+window.evidence.length+'개 HTTP 요청의 상태와 code 검증 통과';window.scenarioDone=true;
+ } catch(e) {status.textContent='실패: '+e.message;window.scenarioError=e.message;}finally{button.disabled=false;}};
+</script></body></html>

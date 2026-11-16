@@ -1,0 +1,208 @@
+[
+  {
+    "step": "1a 회원가입",
+    "method": "POST",
+    "path": "/members",
+    "request": {
+      "email": "a3828216@umc.com",
+      "nickname": "에이3828216",
+      "password": "Password1!"
+    },
+    "authorization": "없음",
+    "status": 201,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON201",
+      "message": "회원가입이 완료되었습니다.",
+      "result": {
+        "memberId": 1,
+        "email": "a3828216@umc.com",
+        "nickname": "에이3828216"
+      }
+    }
+  },
+  {
+    "step": "1b 회원가입",
+    "method": "POST",
+    "path": "/members",
+    "request": {
+      "email": "b3828216@umc.com",
+      "nickname": "비비3828216",
+      "password": "Password1!"
+    },
+    "authorization": "없음",
+    "status": 201,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON201",
+      "message": "회원가입이 완료되었습니다.",
+      "result": {
+        "memberId": 2,
+        "email": "b3828216@umc.com",
+        "nickname": "비비3828216"
+      }
+    }
+  },
+  {
+    "step": "2a 로그인",
+    "method": "POST",
+    "path": "/auth/login",
+    "request": {
+      "email": "a3828216@umc.com",
+      "password": "Password1!"
+    },
+    "authorization": "없음",
+    "status": 200,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON200",
+      "message": "로그인에 성공했습니다.",
+      "result": {
+        "nickname": "에이3828216",
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhMzgyODIxNkB1bWMuY29tIiwiaWF0IjoxNzk0Mzg2MDEzLCJleHAiOjE3OTQzODk2MTN9.phAPpvYgJydX2OvzbzbhiB2VzpvzXlDRNSEAftvJNEk"
+      }
+    }
+  },
+  {
+    "step": "2b 로그인",
+    "method": "POST",
+    "path": "/auth/login",
+    "request": {
+      "email": "b3828216@umc.com",
+      "password": "Password1!"
+    },
+    "authorization": "없음",
+    "status": 200,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON200",
+      "message": "로그인에 성공했습니다.",
+      "result": {
+        "nickname": "비비3828216",
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJiMzgyODIxNkB1bWMuY29tIiwiaWF0IjoxNzk0Mzg2MDEzLCJleHAiOjE3OTQzODk2MTN9.RfNH0c7fTWwTmudi1CHw9Qy3Ffd3SZt4XJ8fto4cuRM"
+      }
+    }
+  },
+  {
+    "step": "3 본인 등록",
+    "method": "POST",
+    "path": "/ratings",
+    "request": {
+      "movieId": 100,
+      "score": 4.5,
+      "comment": "재미있어요"
+    },
+    "authorization": "Bearer (로그인 토큰)",
+    "status": 201,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON201",
+      "message": "평점을 등록했습니다.",
+      "result": {
+        "ratingId": 1,
+        "movieId": 100,
+        "score": 4.5,
+        "comment": "재미있어요",
+        "createdAt": "2026-11-11T17:33:33.584906167"
+      }
+    }
+  },
+  {
+    "step": "4 중복 등록",
+    "method": "POST",
+    "path": "/ratings",
+    "request": {
+      "movieId": 100,
+      "score": 4.5
+    },
+    "authorization": "Bearer (로그인 토큰)",
+    "status": 409,
+    "response": {
+      "isSuccess": false,
+      "code": "RATING409_1",
+      "message": "이미 이 영화에 평점을 남기셨습니다.",
+      "result": null
+    }
+  },
+  {
+    "step": "5 본인 수정",
+    "method": "PATCH",
+    "path": "/ratings/1",
+    "request": {
+      "score": 5,
+      "comment": "수정 완료"
+    },
+    "authorization": "Bearer (로그인 토큰)",
+    "status": 200,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON200",
+      "message": "평점을 수정했습니다.",
+      "result": {
+        "ratingId": 1,
+        "movieId": 100,
+        "score": 5,
+        "comment": "수정 완료",
+        "createdAt": "2026-11-11T17:33:33.584906"
+      }
+    }
+  },
+  {
+    "step": "6 타인 수정",
+    "method": "PATCH",
+    "path": "/ratings/1",
+    "request": {
+      "score": 1
+    },
+    "authorization": "Bearer (로그인 토큰)",
+    "status": 403,
+    "response": {
+      "isSuccess": false,
+      "code": "RATING403_1",
+      "message": "본인이 작성한 평점만 수정하거나 삭제할 수 있습니다.",
+      "result": null
+    }
+  },
+  {
+    "step": "7 토큰 없이 조회",
+    "method": "GET",
+    "path": "/members/me",
+    "request": null,
+    "authorization": "없음",
+    "status": 401,
+    "response": {
+      "isSuccess": false,
+      "code": "AUTH401_2",
+      "message": "로그인이 필요한 요청입니다.",
+      "result": null
+    }
+  },
+  {
+    "step": "8 없는 평점 삭제",
+    "method": "DELETE",
+    "path": "/ratings/99999",
+    "request": null,
+    "authorization": "Bearer (로그인 토큰)",
+    "status": 404,
+    "response": {
+      "isSuccess": false,
+      "code": "RATING404_1",
+      "message": "해당 평점을 찾을 수 없습니다.",
+      "result": null
+    }
+  },
+  {
+    "step": "9 본인 삭제",
+    "method": "DELETE",
+    "path": "/ratings/1",
+    "request": null,
+    "authorization": "Bearer (로그인 토큰)",
+    "status": 200,
+    "response": {
+      "isSuccess": true,
+      "code": "COMMON200",
+      "message": "평점을 삭제했습니다.",
+      "result": null
+    }
+  }
+]

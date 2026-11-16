@@ -1,0 +1,141 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>실제 HTTP 검증 기록</title><style>body{max-width:950px;margin:40px auto;padding:20px;font-family:Arial,sans-serif;background:#f4f6fb;color:#18223b}article{background:white;padding:24px;border:1px solid #dde3ef;border-radius:12px;margin:18px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f5fa;padding:16px;line-height:1.6}h2{font-size:19px}small{color:#777}</style><h1>7주차 · 실제 HTTP 검증 기록</h1><p>2026-11-11 · 실행한 Spring Boot 서버의 응답 기록입니다. Postman 화면 캡처가 아닙니다.</p>
+<article><h2>1a 회원가입 · HTTP 201</h2><small>REQUEST</small><pre>POST /members
+Authorization: 없음
+{
+  &quot;email&quot;: &quot;a3828216@umc.com&quot;,
+  &quot;nickname&quot;: &quot;에이3828216&quot;,
+  &quot;password&quot;: &quot;Password1!&quot;
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON201&quot;,
+  &quot;message&quot;: &quot;회원가입이 완료되었습니다.&quot;,
+  &quot;result&quot;: {
+    &quot;memberId&quot;: 1,
+    &quot;email&quot;: &quot;a3828216@umc.com&quot;,
+    &quot;nickname&quot;: &quot;에이3828216&quot;
+  }
+}</pre></article>
+<article><h2>1b 회원가입 · HTTP 201</h2><small>REQUEST</small><pre>POST /members
+Authorization: 없음
+{
+  &quot;email&quot;: &quot;b3828216@umc.com&quot;,
+  &quot;nickname&quot;: &quot;비비3828216&quot;,
+  &quot;password&quot;: &quot;Password1!&quot;
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON201&quot;,
+  &quot;message&quot;: &quot;회원가입이 완료되었습니다.&quot;,
+  &quot;result&quot;: {
+    &quot;memberId&quot;: 2,
+    &quot;email&quot;: &quot;b3828216@umc.com&quot;,
+    &quot;nickname&quot;: &quot;비비3828216&quot;
+  }
+}</pre></article>
+<article><h2>2a 로그인 · HTTP 200</h2><small>REQUEST</small><pre>POST /auth/login
+Authorization: 없음
+{
+  &quot;email&quot;: &quot;a3828216@umc.com&quot;,
+  &quot;password&quot;: &quot;Password1!&quot;
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON200&quot;,
+  &quot;message&quot;: &quot;로그인에 성공했습니다.&quot;,
+  &quot;result&quot;: {
+    &quot;nickname&quot;: &quot;에이3828216&quot;,
+    &quot;accessToken&quot;: &quot;eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhMzgyODIxNkB1bWMuY29tIiwiaWF0IjoxNzk0Mzg2MDEzLCJleHAiOjE3OTQzODk2MTN9.phAPpvYgJydX2OvzbzbhiB2VzpvzXlDRNSEAftvJNEk&quot;
+  }
+}</pre></article>
+<article><h2>2b 로그인 · HTTP 200</h2><small>REQUEST</small><pre>POST /auth/login
+Authorization: 없음
+{
+  &quot;email&quot;: &quot;b3828216@umc.com&quot;,
+  &quot;password&quot;: &quot;Password1!&quot;
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON200&quot;,
+  &quot;message&quot;: &quot;로그인에 성공했습니다.&quot;,
+  &quot;result&quot;: {
+    &quot;nickname&quot;: &quot;비비3828216&quot;,
+    &quot;accessToken&quot;: &quot;eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJiMzgyODIxNkB1bWMuY29tIiwiaWF0IjoxNzk0Mzg2MDEzLCJleHAiOjE3OTQzODk2MTN9.RfNH0c7fTWwTmudi1CHw9Qy3Ffd3SZt4XJ8fto4cuRM&quot;
+  }
+}</pre></article>
+<article><h2>3 본인 등록 · HTTP 201</h2><small>REQUEST</small><pre>POST /ratings
+Authorization: Bearer (로그인 토큰)
+{
+  &quot;movieId&quot;: 100,
+  &quot;score&quot;: 4.5,
+  &quot;comment&quot;: &quot;재미있어요&quot;
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON201&quot;,
+  &quot;message&quot;: &quot;평점을 등록했습니다.&quot;,
+  &quot;result&quot;: {
+    &quot;ratingId&quot;: 1,
+    &quot;movieId&quot;: 100,
+    &quot;score&quot;: 4.5,
+    &quot;comment&quot;: &quot;재미있어요&quot;,
+    &quot;createdAt&quot;: &quot;2026-11-11T17:33:33.584906167&quot;
+  }
+}</pre></article>
+<article><h2>4 중복 등록 · HTTP 409</h2><small>REQUEST</small><pre>POST /ratings
+Authorization: Bearer (로그인 토큰)
+{
+  &quot;movieId&quot;: 100,
+  &quot;score&quot;: 4.5
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: false,
+  &quot;code&quot;: &quot;RATING409_1&quot;,
+  &quot;message&quot;: &quot;이미 이 영화에 평점을 남기셨습니다.&quot;,
+  &quot;result&quot;: null
+}</pre></article>
+<article><h2>5 본인 수정 · HTTP 200</h2><small>REQUEST</small><pre>PATCH /ratings/1
+Authorization: Bearer (로그인 토큰)
+{
+  &quot;score&quot;: 5,
+  &quot;comment&quot;: &quot;수정 완료&quot;
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON200&quot;,
+  &quot;message&quot;: &quot;평점을 수정했습니다.&quot;,
+  &quot;result&quot;: {
+    &quot;ratingId&quot;: 1,
+    &quot;movieId&quot;: 100,
+    &quot;score&quot;: 5,
+    &quot;comment&quot;: &quot;수정 완료&quot;,
+    &quot;createdAt&quot;: &quot;2026-11-11T17:33:33.584906&quot;
+  }
+}</pre></article>
+<article><h2>6 타인 수정 · HTTP 403</h2><small>REQUEST</small><pre>PATCH /ratings/1
+Authorization: Bearer (로그인 토큰)
+{
+  &quot;score&quot;: 1
+}</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: false,
+  &quot;code&quot;: &quot;RATING403_1&quot;,
+  &quot;message&quot;: &quot;본인이 작성한 평점만 수정하거나 삭제할 수 있습니다.&quot;,
+  &quot;result&quot;: null
+}</pre></article>
+<article><h2>7 토큰 없이 조회 · HTTP 401</h2><small>REQUEST</small><pre>GET /members/me
+Authorization: 없음
+</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: false,
+  &quot;code&quot;: &quot;AUTH401_2&quot;,
+  &quot;message&quot;: &quot;로그인이 필요한 요청입니다.&quot;,
+  &quot;result&quot;: null
+}</pre></article>
+<article><h2>8 없는 평점 삭제 · HTTP 404</h2><small>REQUEST</small><pre>DELETE /ratings/99999
+Authorization: Bearer (로그인 토큰)
+</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: false,
+  &quot;code&quot;: &quot;RATING404_1&quot;,
+  &quot;message&quot;: &quot;해당 평점을 찾을 수 없습니다.&quot;,
+  &quot;result&quot;: null
+}</pre></article>
+<article><h2>9 본인 삭제 · HTTP 200</h2><small>REQUEST</small><pre>DELETE /ratings/1
+Authorization: Bearer (로그인 토큰)
+</pre><small>RESPONSE</small><pre>{
+  &quot;isSuccess&quot;: true,
+  &quot;code&quot;: &quot;COMMON200&quot;,
+  &quot;message&quot;: &quot;평점을 삭제했습니다.&quot;,
+  &quot;result&quot;: null
+}</pre></article>
