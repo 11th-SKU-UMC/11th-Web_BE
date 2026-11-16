@@ -2,6 +2,7 @@ package com.umc.movie.controller;
 
 import com.umc.movie.dto.MemberResponse;
 import com.umc.movie.service.MemberService;
+import com.umc.movie.util.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,6 +25,9 @@ class MemberControllerValidationTest {
 
     @MockitoBean
     private MemberService memberService;
+
+    @MockitoBean
+    private JwtUtil jwtUtil;
 
     @Test
     void nicknameOutsideAllowedLengthReturnsBadRequestBeforeLookup() throws Exception {

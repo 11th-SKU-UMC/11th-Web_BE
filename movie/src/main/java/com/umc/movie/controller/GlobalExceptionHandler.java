@@ -3,6 +3,7 @@ package com.umc.movie.controller;
 import com.umc.movie.dto.ApiResponse;
 import com.umc.movie.exception.DuplicateError;
 import com.umc.movie.exception.DuplicateResourceException;
+import com.umc.movie.exception.ApiException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,12 @@ import java.util.regex.Pattern;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiResponse<Void>> handleApiException(ApiException exception) {
+        return ResponseEntity.status(exception.getStatus())
+                .body(ApiResponse.failure(exception.getCode(), exception.getMessage()));
+    }
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final Pattern MYSQL_DUPLICATE_KEY = Pattern.compile("(?i)for key ['`\"]?([a-z0-9_.]+)");
 
