@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS rating (
     UNIQUE KEY uk_rating_member_movie (member_id, movie_id)
 );
 
--- 즐겨찾기 실습용 테이블. 현재 Java 엔티티는 구현하지 않았다.
+-- 회원별 영화 즐겨찾기. 같은 영화는 회원당 한 번만 추가할 수 있다.
 CREATE TABLE IF NOT EXISTS favorite (
     favorite_id BIGINT AUTO_INCREMENT PRIMARY KEY,
     member_id   BIGINT   NOT NULL,
