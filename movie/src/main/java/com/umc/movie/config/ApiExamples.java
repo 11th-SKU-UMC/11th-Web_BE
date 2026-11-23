@@ -58,4 +58,19 @@ public final class ApiExamples {
     public static final String RATING_CONFLICT = """
             {"isSuccess":false,"code":"RATING409_1","message":"이미 이 영화에 평점을 남기셨습니다.","result":null}
             """;
+    public static final String RATING_FORBIDDEN = """
+            {"isSuccess":false,"code":"RATING403_1","message":"본인이 작성한 평점만 수정하거나 삭제할 수 있습니다.","result":null}
+            """;
+    public static final String RATING_NOT_FOUND = """
+            {"isSuccess":false,"code":"RATING404_1","message":"해당 평점을 찾을 수 없습니다.","result":null}
+            """;
+    public static final String RATING_VALIDATION_ERROR = """
+            {"isSuccess":false,"code":"COMMON4001","message":"별점은 1점 이상이어야 합니다.","result":null}
+            """;
+    public static final String INVALID_PAGE = """
+            {"isSuccess":false,"code":"COMMON400","message":"page는 0 이상, size는 1~100이어야 합니다.","result":null}
+            """;
+    public static final String NICKNAME_CONFLICT = """
+            {"isSuccess":false,"code":"MEMBER409_1","message":"이미 사용 중인 닉네임입니다.","result":null}
+            """;
 }

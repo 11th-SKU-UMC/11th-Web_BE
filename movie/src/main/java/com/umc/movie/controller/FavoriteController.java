@@ -45,7 +45,7 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
 
     @PostMapping("/favorites")
-    @Operation(summary = "즐겨찾기 등록", description = "Authorization: Bearer {token}이 필요합니다. memberId는 받지 않습니다.")
+    @Operation(summary = "즐겨찾기 등록", description = "Bearer 토큰이 필요합니다. Authorization: Bearer {token}으로 전달하며 memberId는 받지 않습니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "등록 성공 (COMMON201)",
                     useReturnTypeSchema = true, content = @Content(mediaType = "application/json",
@@ -70,7 +70,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/favorites")
-    @Operation(summary = "내 즐겨찾기 목록", description = "토큰 회원의 즐겨찾기를 favoriteId 내림차순(최신 등록 순)으로 조회합니다.")
+    @Operation(summary = "내 즐겨찾기 목록", description = "Bearer 토큰이 필요합니다. 토큰 회원의 즐겨찾기를 favoriteId 내림차순(최신 등록 순)으로 조회합니다.")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공 (COMMON200), 없으면 빈 배열",
             useReturnTypeSchema = true, content = @Content(mediaType = "application/json",
             examples = @ExampleObject(value = ApiExamples.FAVORITE_LIST)))
@@ -82,7 +82,7 @@ public class FavoriteController {
     }
 
     @GetMapping("/favorites/{movieId}")
-    @Operation(summary = "즐겨찾기 여부", description = "등록 여부를 isFavorite으로 반환합니다. 미등록 영화도 200과 false를 반환합니다.")
+    @Operation(summary = "즐겨찾기 여부", description = "Bearer 토큰이 필요합니다. 등록 여부를 isFavorite으로 반환합니다. 미등록 영화도 200과 false를 반환합니다.")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "조회 성공 (COMMON200)",
             useReturnTypeSchema = true, content = @Content(mediaType = "application/json", examples = {
             @ExampleObject(name = "등록됨", value = ApiExamples.FAVORITE_TRUE),
@@ -96,7 +96,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/favorites/{movieId}")
-    @Operation(summary = "즐겨찾기 해제", description = "토큰 회원의 해당 영화 즐겨찾기를 삭제합니다.")
+    @Operation(summary = "즐겨찾기 해제", description = "Bearer 토큰이 필요합니다. 토큰 회원의 해당 영화 즐겨찾기를 삭제합니다.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "해제 성공 (COMMON200)",
                     useReturnTypeSchema = true, content = @Content(mediaType = "application/json",
