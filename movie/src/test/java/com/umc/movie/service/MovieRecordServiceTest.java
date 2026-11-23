@@ -79,7 +79,7 @@ class MovieRecordServiceTest {
     }
 
     @Test
-    void duplicateFavoriteRejectsBothWrites() {
+    void duplicateFavoriteFailsAfterRatingSaveSoTransactionMustRollBack() {
         when(memberRepository.findById(1L)).thenReturn(Optional.of(mock(Member.class)));
         when(favoriteRepository.existsByMember_MemberIdAndMovieId(1L, 10L)).thenReturn(true);
 
@@ -87,7 +87,7 @@ class MovieRecordServiceTest {
                 new CreateMovieRecordRequest(10L, 4, null, true)));
 
         assertEquals("FAVORITE409_1", exception.getCode());
-        verify(ratingRepository, never()).save(any());
+        verify(ratingRepository).save(any(Rating.class));
         verify(favoriteRepository, never()).save(any());
     }
 }

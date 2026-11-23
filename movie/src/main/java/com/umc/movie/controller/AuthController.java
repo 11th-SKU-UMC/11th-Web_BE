@@ -22,7 +22,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    @Operation(summary = "로그인 (공개 API)", description = "토큰 없이 호출합니다. result.accessToken을 복사해 Swagger의 Authorize에 입력하세요.")
+    @Operation(summary = "로그인 (공개 API)", description = "토큰 없이 호출하는 공개 API입니다. result.accessToken을 복사해 Swagger의 Authorize에 입력하세요.")
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "로그인 성공 (COMMON200)",
                     useReturnTypeSchema = true, content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
