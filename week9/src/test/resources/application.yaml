@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:umc_movie;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      # 테스트마다 메모리 DB의 스키마를 새로 만들어 엔티티 매핑도 함께 검증합니다.
+      ddl-auto: create-drop
+    open-in-view: false
+
+jwt:
+  secret: test-secret-for-context-loading-only
+  access-expiration: 3600
