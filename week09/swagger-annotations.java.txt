@@ -1,0 +1,86 @@
+// 기존 컨트롤러에 각각 붙이는 예시. 기존 응답 코드와 대조할 것.
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+// 평점 등록
+@Operation(summary = "평점 등록", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "COMMON201"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "409", description = "RATING409_1")
+})
+// 기존 매핑 및 메서드 유지
+
+// 평점 수정
+@Operation(summary = "평점 수정", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "RATING403_1")
+})
+// 기존 매핑 및 메서드 유지
+
+// 평점 삭제
+@Operation(summary = "평점 삭제", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2")
+})
+// 기존 매핑 및 메서드 유지
+
+// 유저별 평점 조회
+@Operation(summary = "유저별 평점 조회", description = "로그인 없이 조회할 수 있습니다.")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200")
+})
+// 기존 매핑 및 메서드 유지
+
+// 내 정보 조회
+@Operation(summary = "내 정보 조회", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2")
+})
+// 기존 매핑 및 메서드 유지
+
+// 내 정보 수정
+@Operation(summary = "내 정보 수정", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2")
+})
+// 기존 매핑 및 메서드 유지
+
+// 내 즐겨찾기 조회
+@Operation(summary = "내 즐겨찾기 조회", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2")
+})
+// 기존 매핑 및 메서드 유지
+
+// 즐겨찾기 여부 조회
+@Operation(summary = "즐겨찾기 여부 조회", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2")
+})
+// 기존 매핑 및 메서드 유지
+
+// 즐겨찾기 해제
+@Operation(summary = "즐겨찾기 해제", description = "로그인한 회원의 요청입니다.")
+@SecurityRequirement(name = "bearerAuth")
+@ApiResponses({
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "COMMON200"),
+    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "AUTH401_2")
+})
+// 기존 매핑 및 메서드 유지
+
